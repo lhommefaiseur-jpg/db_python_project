@@ -1,0 +1,47 @@
+For database.py :
+    -we imported the whole package with first line 
+    and we imported the name modul error with the second import
+    -Error is the base class of all error in the lib
+    -if the connection is up it returns the connection(access to the db)
+     and if it fails it returns none + prints an error
+    -the basic flow of using cursor():
+        cursor = connection.cursor()                  # 1. get a cursor from the connection
+        cursor.execute("SELECT * FROM vlans")         # 2. send a query
+        rows = cursor.fetchall()                      # 3. read the results
+        cursor.close()                                # 4. release it
+    -run_query(sql, params) is for reading and returns a list of dictionaries
+    -run_command(sql, params) is for changing and returns True or False
+    -params in the two funtions is a tuple (it is inmutable compared to lists but faster)
+     because if it were a string it would risk SQL injection , cuz a tuple has the %s bullshit
+     it is set to none to make it an optinal argument,so you don't have to add a paramas.
+    
+
+
+
+
+for display.py :
+    -its main function is to make the output look sexy 
+    you can change tablefmt if you want 
+
+
+for vlan_manager.py :
+    -it prints all the table of vlans or just one row or add or updates or deletes rows   
+
+
+for main.py : 
+    -the ask_int is for what the user choses in the menu
+    -we strip the input in ask_int to remove any accidental spaces(in the beginning or end )
+    -we use while to keep asking the user until he choses 0
+    -for ask_vlanid() :1 to 4094 is the real range in networking
+    -
+
+
+
+
+database.py        connection (plus the query helpers)
+vlans.py           data functions for the vlans table
+subnets.py         data functions for the subnets table
+ip_addresses.py    data functions for the ip_addresses table
+devices.py         data functions for the devices table
+display.py         formatting output
+main.py            menu / user interaction
