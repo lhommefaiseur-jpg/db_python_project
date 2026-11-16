@@ -28,6 +28,40 @@ for vlan_manager.py :
     -it prints all the table of vlans or just one row or add or updates or deletes rows   
 
 
+for subnet_manager.py :
+    -we chose min_cidr = 22 because it's the most practical prefix range (around 1000 machines)
+    -this one is more complicated cuz it relates to other tables(like vlans) the hierarchy begin
+        from here
+    -3 get functions :  one fetches all of the subnets
+                        one that fetchs on subnet(based on subnet_id)
+                        one that fetchs on subnet(based on vlan_id)
+        + one get function that fetch how many ip_addresses are in each subnet based on their
+            status (allocated , ....)
+            -we use left join because there are subnets with no ip addresses of a certain status
+            -we did count(i.ip_id) instead of count(*) so we don't count rows with NULL
+            -this function actually gave me brain damage
+    -for the add_subnet function :
+        -gateway is kinda optional so it's set to none
+        -we use ipaddress. to check the validiy of network_text (network address + cidr)
+            and we set strict to true so it forces python to erase an error
+        -overlap() is function from the ipaddress lib to see if two subnets have overlapping ip
+            addressses.
+        -the network_text will be used in main.py
+        -this method : network.hosts(),returns all the usable addresses in a network (using ipaddress lib)
+        -the part after connection = connection() does two things :
+            -it adds the subnet in the subnets table
+            -it populates the ip_addresses with the possibles ip's of that subnet
+        -the .lastrowid is a way to tell python the id of your newly created subnet(its auto_incremented )
+    for delete_subnet(subnet_id) :
+        -we use the cont(*) in results to count how many devices are connected to the subnet before 
+            deleting (there must be no devices connected on a subnet to delet it)
+        -the result[0] is the first row value's , ["n"] selects the count(*) column
+
+
+
+
+
+
 for main.py : 
     -the ask_int is for what the user choses in the menu
     -we strip the input in ask_int to remove any accidental spaces(in the beginning or end )
