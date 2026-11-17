@@ -67,7 +67,11 @@ for main.py :
     -we strip the input in ask_int to remove any accidental spaces(in the beginning or end )
     -we use while to keep asking the user until he choses 0
     -for ask_vlanid() :1 to 4094 is the real range in networking
-    -
+    -in the subnets action in create_subnet() ,you should remember that create_subnets()
+        returns two outputs or a tuple with two values 
+    -now because we added subnets into the equation the menu will be overwhelming so
+        we are going to create a main menu that has the main tables(vlans,subnets...)
+        and a sub menu for each
 
 
 
