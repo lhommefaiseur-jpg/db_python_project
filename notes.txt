@@ -10,6 +10,11 @@ For database.py :
         rows = cursor.fetchall()                      # 3. read the results
         cursor.close()                                # 4. release it
     -run_query(sql, params) is for reading and returns a list of dictionaries
+    _for run_transaction :
+        i added a exept_one_row parametre cuz i got stuck in the ip_addresses table 
+            i needed i a helper function that returns an error or rollback when
+                there is a command run but no rows affected wich happens in said table
+                but you can always set it to false for it to function like a normal transaction
     -run_command(sql, params) is for changing and returns True or False
     -params in the two funtions is a tuple (it is inmutable compared to lists but faster)
      because if it were a string it would risk SQL injection , cuz a tuple has the %s bullshit
@@ -57,8 +62,41 @@ for subnet_manager.py :
             deleting (there must be no devices connected on a subnet to delet it)
         -the result[0] is the first row value's , ["n"] selects the count(*) column
 
-
-
+for ip_address_manager.py : 
+    -we set the two values i the begening because i knew i would need to use them multiple times
+    -the left join on ip_detail_sql is because there are a lot of ip addresses that do not have
+        devices
+        -and this query brings up all that we need to know about an IP
+    -for get_ips_by_subnets :
+        -it shows all the ips in a subnet ,you can filter the ips by status(it's optional)
+        -we put subnet_id in params[] so we can add status if there is any
+        -the ip address is a text ,so order by would not work 
+            -INET_ATON is the way we found to solve this issue:
+                it converts varchar into a 32 bit integer
+    -for get_next_available :
+        -it returns all the details of an ip address using the ip_detail_sql from earlier
+            based on the ip address
+    -for get_next_available :
+        -it gets the lowest available ip address in a subnet
+    - for is_gateway :
+        -it is a small helper function to verify if an ip is that of a gateway
+    -for reserve_ip :
+        -it changes the status of an address from available to reseved
+        -ip as in the arg of the function is a dictionnary derived from the table in data base
+    -for unreserved_ip :
+        -it changes the status of an address from reserved to available(except for address of the gateway)
+    -for why_not_allocatable : 
+        -it returns the reason why an address is not allocatable
+        -we added the extra in case the address is that is of the gateway
+    -for allocate_ip :
+        -it changes the status on an address from available to allocated
+            + it creates a row in the devices table (at the same time)
+        -we cleaned up the user input and added a fallback with : (value ot "").strip()
+        -for ok , it ensures that an ip cannot have it's status allocated while not having a device
+    -for release_ip() : 
+        -it changes the status of an ip from allocated to available while also deleting it's adjacent
+            device if any
+        
 
 
 

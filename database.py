@@ -37,7 +37,7 @@ def run_query(sql, params=None):
 
 
 
-def run_transaction(statements):
+def run_transaction(statements, expect_one_row=False):
     connection = connection_db()
     if connection is None:
         return False
@@ -47,6 +47,9 @@ def run_transaction(statements):
         cursor = connection.cursor()
         for sql, params in statements:
             cursor.execute(sql, params)
+            if expect_one_row and cursor.rowcount != 1:
+                connection.rollback()
+                return False
         connection.commit()
         return True
     except Error as e:
@@ -57,6 +60,7 @@ def run_transaction(statements):
         if cursor is not None:
             cursor.close()
         connection.close()
+
 
 
 def run_command(sql, params=None):
