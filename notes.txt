@@ -110,6 +110,8 @@ for main.py :
     -now because we added subnets into the equation the menu will be overwhelming so
         we are going to create a main menu that has the main tables(vlans,subnets...)
         and a sub menu for each
+    -lookup_ip : validates user input as ipv4 and fetches info about the address from the DB
+    -pick_next_available : asks for subnet and returns the first available ip
 
 
 
